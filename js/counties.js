@@ -8,13 +8,30 @@ const displayCountries = (coutries) => {
     const countryDiv = document.getElementById('countries');
     coutries.forEach(country => {
         const div = document.createElement('div');
-        const h4 = document.createElement('h4');
         div.classList.add('design');
-        h4.innerText = country.name;
-        div.appendChild(h4);
-        const p = document.createElement('p');
-        p.innerText = country.capital;
-        div.appendChild(p);
+        div.innerHTML = `
+        <h3>${country.name}</h3>
+        <p>${country.capital}</p>
+        <button onclick="loadCountryByName('${country.name}')">Details</button>
+        `;
         countryDiv.appendChild(div);
     });
+}
+const loadCountryByName = name => {
+    const url = `https://restcountries.com/v2/name/${name}`;
+    // console.log(url);
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayCountryDetail(data[0]));
+
+}
+const displayCountryDetail = country => {
+    console.log(country);
+    const countryDiv = document.getElementById('country-detail');
+    countryDiv.innerHTML =
+        `
+    <h5>${country.name}</h5>
+    <p>population : ${country.population}</p>
+    <img  width=200px src="${country.flag}">
+    `
 }
